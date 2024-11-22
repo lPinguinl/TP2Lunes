@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18afdbc983fe8704aae3a7c77368a6e9, type: 3}
+  m_Name: Chori Sin Derechos
+  m_EditorClassIdentifier: 
+  input: {fileID: 11400000, guid: e6f19904c291e3e4ba61d9ee995a8810, type: 2}
+  output: {fileID: 11400000, guid: 38b3932134273334db29bf612f7e777b, type: 2}
+  burningTimerMax: 6
