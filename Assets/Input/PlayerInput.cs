@@ -80,6 +80,24 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleDebug"",
+                    ""type"": ""Button"",
+                    ""id"": ""e43c2e65-dcbc-4353-b89b-3af027d2f61d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ExecuteCommand"",
+                    ""type"": ""Button"",
+                    ""id"": ""1eab16b6-1579-466c-84f2-be5c5eaa55de"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -192,6 +210,28 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""CursorLock"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fe581d28-292c-4fac-8317-3e8940a6444d"",
+                    ""path"": ""<Keyboard>/quote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleDebug"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c2284e1-8079-4941-a685-478b75bcc9b0"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ExecuteCommand"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -206,6 +246,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_OnFoot_Interact = m_OnFoot.FindAction("Interact", throwIfNotFound: true);
         m_OnFoot_Interactuar = m_OnFoot.FindAction("Interactuar", throwIfNotFound: true);
         m_OnFoot_CursorLock = m_OnFoot.FindAction("CursorLock", throwIfNotFound: true);
+        m_OnFoot_ToggleDebug = m_OnFoot.FindAction("ToggleDebug", throwIfNotFound: true);
+        m_OnFoot_ExecuteCommand = m_OnFoot.FindAction("ExecuteCommand", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -273,6 +315,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_OnFoot_Interact;
     private readonly InputAction m_OnFoot_Interactuar;
     private readonly InputAction m_OnFoot_CursorLock;
+    private readonly InputAction m_OnFoot_ToggleDebug;
+    private readonly InputAction m_OnFoot_ExecuteCommand;
     public struct OnFootActions
     {
         private @PlayerInput m_Wrapper;
@@ -283,6 +327,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @Interact => m_Wrapper.m_OnFoot_Interact;
         public InputAction @Interactuar => m_Wrapper.m_OnFoot_Interactuar;
         public InputAction @CursorLock => m_Wrapper.m_OnFoot_CursorLock;
+        public InputAction @ToggleDebug => m_Wrapper.m_OnFoot_ToggleDebug;
+        public InputAction @ExecuteCommand => m_Wrapper.m_OnFoot_ExecuteCommand;
         public InputActionMap Get() { return m_Wrapper.m_OnFoot; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -310,6 +356,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @CursorLock.started += instance.OnCursorLock;
             @CursorLock.performed += instance.OnCursorLock;
             @CursorLock.canceled += instance.OnCursorLock;
+            @ToggleDebug.started += instance.OnToggleDebug;
+            @ToggleDebug.performed += instance.OnToggleDebug;
+            @ToggleDebug.canceled += instance.OnToggleDebug;
+            @ExecuteCommand.started += instance.OnExecuteCommand;
+            @ExecuteCommand.performed += instance.OnExecuteCommand;
+            @ExecuteCommand.canceled += instance.OnExecuteCommand;
         }
 
         private void UnregisterCallbacks(IOnFootActions instance)
@@ -332,6 +384,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @CursorLock.started -= instance.OnCursorLock;
             @CursorLock.performed -= instance.OnCursorLock;
             @CursorLock.canceled -= instance.OnCursorLock;
+            @ToggleDebug.started -= instance.OnToggleDebug;
+            @ToggleDebug.performed -= instance.OnToggleDebug;
+            @ToggleDebug.canceled -= instance.OnToggleDebug;
+            @ExecuteCommand.started -= instance.OnExecuteCommand;
+            @ExecuteCommand.performed -= instance.OnExecuteCommand;
+            @ExecuteCommand.canceled -= instance.OnExecuteCommand;
         }
 
         public void RemoveCallbacks(IOnFootActions instance)
@@ -357,5 +415,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnInteractuar(InputAction.CallbackContext context);
         void OnCursorLock(InputAction.CallbackContext context);
+        void OnToggleDebug(InputAction.CallbackContext context);
+        void OnExecuteCommand(InputAction.CallbackContext context);
     }
 }

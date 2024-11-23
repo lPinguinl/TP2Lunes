@@ -13,6 +13,9 @@ public class InputManager : MonoBehaviour
 
     public event EventHandler OnInteractAction; 
     public event EventHandler OnInteractuarAction;
+    
+    private DebugController debugController; // Referencia al DebugController
+
 
 
     private void Awake()
@@ -28,12 +31,18 @@ public class InputManager : MonoBehaviour
         cursorLock = GetComponent<MouseLock>();
         
         interactions = GetComponent<PlayerInteractions>();
+        
+        debugController = GetComponent<DebugController>();
 
         onFoot.Interact.performed += Interact_performed;
         onFoot.Interactuar.performed += Interactuar_performed;
         
         onFoot.CursorLock.performed += ctx => cursorLock.enabled = false;
         onFoot.CursorLock.canceled += ctx => cursorLock.enabled = true;
+        
+        onFoot.ToggleDebug.performed += ctx => debugController.OnToggleDebug();
+        onFoot.ExecuteCommand.canceled += ctx => debugController.OnReturn();
+        
         
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = System.Object;
 
 /*
 
@@ -181,4 +182,37 @@ public class DeliveryManager : MonoBehaviour
             return a.timeRemaining.CompareTo(b.timeRemaining);
         });
     }
+    
+    public void ChangeRecipe(string recipeName)
+    {
+        bool recipeFound = false;
+
+        foreach (var (recipe, timeRemaining) in recipeTree.InOrderTraversal())
+        {
+            if (recipe.recipeName == recipeName)
+            {
+                // Aqui eliminamos la receta que ya existe en la UI
+                recipeTree.Remove((recipe, timeRemaining));
+                recipeFound = true;
+                Debug.Log($"La receta '{recipeName}' ha sido reemplazada.");
+                break;
+            }
+        }
+
+        if (recipeFound)
+        {
+            // Agregamos una nueva receta aleatoria
+            RecipeSO newRecipe = recipeListSO.recipeSOList[UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count)];
+            recipeTree.Insert((newRecipe, 60f)); // Tiempo inicial de 60 segundos
+            OnRecipeSpawned?.Invoke(this, EventArgs.Empty); // Actualiza la UI
+            Debug.Log($"La nueva receta es: {newRecipe.recipeName}");
+        }
+        else
+        {
+            Debug.Log($"No se encontró la receta con el nombre: {recipeName}");
+        }
+    }
+
+
+
 }
