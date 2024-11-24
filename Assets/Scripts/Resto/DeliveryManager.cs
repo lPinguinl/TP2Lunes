@@ -203,8 +203,8 @@ public class DeliveryManager : MonoBehaviour
         {
             // Agregamos una nueva receta aleatoria
             RecipeSO newRecipe = recipeListSO.recipeSOList[UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count)];
-            recipeTree.Insert((newRecipe, 60f)); // Tiempo inicial de 60 segundos
-            OnRecipeSpawned?.Invoke(this, EventArgs.Empty); // Actualiza la UI
+            recipeTree.Insert((newRecipe, 60f)); // Le ponemos el minuto de duracion desde 0
+            OnRecipeSpawned?.Invoke(this, EventArgs.Empty); // Actualizacion en la UI
             Debug.Log($"La nueva receta es: {newRecipe.recipeName}");
         }
         else
