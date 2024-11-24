@@ -1,15 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Object = System.Object;
-
-/*
-
- Ahora usamos un TDA ABB para manejar las órdenes de cocina.
- 
- Implementamos Quicksort sobre los datos extraídos del ABB para mantener el orden dinámico requerido.
-
-*/
 
 public class DeliveryManager : MonoBehaviour
 {
@@ -24,23 +15,31 @@ public class DeliveryManager : MonoBehaviour
 
     private float spawnRecipeTimer;
     private float spawnRecipeTimerMax = 4f;
-
-    private int expiredRecipeCount = 0;
+    
     private int completedRecipesCount = 0;
+
+    private ISortingStrategy sortingStrategy;
+    private IRecipeGenerationStrategy generationStrategy;
+    private IExpirationStrategy expirationStrategy;
 
     private void Awake()
     {
         Instance = this;
 
-        // Inicializamos el ABB con un comparador que prioriza prioridad y tiempo
+        // Inicializar el árbol binario
         recipeTree = new BinarySearchTree<(RecipeSO recipe, float timeRemaining)>((a, b) =>
         {
             if (a.recipe.priority != b.recipe.priority)
-                return b.recipe.priority.CompareTo(a.recipe.priority); // Orden descendente por prioridad
-            return a.timeRemaining.CompareTo(b.timeRemaining); // Orden ascendente por tiempo
+                return b.recipe.priority.CompareTo(a.recipe.priority);
+            return a.timeRemaining.CompareTo(b.timeRemaining);
         });
 
         sortedRecipeList = new List<(RecipeSO recipe, float timeRemaining)>();
+
+        // Configurar estrategias por defecto
+        SetSortingStrategy(new QuickSortStrategy());
+        SetGenerationStrategy(new RandomRecipeGenerationStrategy());
+        SetExpirationStrategy(new DefaultExpirationStrategy());
     }
 
     private void Update()
@@ -50,76 +49,56 @@ public class DeliveryManager : MonoBehaviour
         if (spawnRecipeTimer <= 0f)
         {
             spawnRecipeTimer = spawnRecipeTimerMax;
-
-            if (recipeTree.Count() < 4) // Limite máximo de recetas activas
-            {
-                RecipeSO newRecipe = recipeListSO.recipeSOList[UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count)];
-                recipeTree.Insert((newRecipe, 60f)); // Tiempo inicial de 60 segundos
-                OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
-            }
+            GenerateNewRecipe();
         }
 
-        // Actualizar tiempos de las recetas
-        foreach (var (recipe, timeRemaining) in recipeTree.InOrderTraversal())
-        {
-            if (timeRemaining > 0)
-            {
-                recipeTree.Remove((recipe, timeRemaining));
-                recipeTree.Insert((recipe, timeRemaining - Time.deltaTime));
-            }
-            else
-            {
-                recipeTree.Remove((recipe, timeRemaining));
-                Debug.Log($"La receta '{recipe.recipeName}' ha expirado.");
-                expiredRecipeCount++;
-                if (expiredRecipeCount >= 4)
-                {
-                    Debug.Log("Se han perdido 4 recetas. Fin del juego.");
-                    GameManager.Instance.SetGameOver();
-                }
-            }
-        }
-
-        // Ordenar recetas dinámicamente
+        // Manejo de expiración y ordenamiento
+        HandleRecipeExpiration();
         UpdateSortedRecipes();
+    }
+
+    public void SetSortingStrategy(ISortingStrategy strategy)
+    {
+        sortingStrategy = strategy;
+    }
+
+    public void SetGenerationStrategy(IRecipeGenerationStrategy strategy)
+    {
+        generationStrategy = strategy;
+    }
+
+    public void SetExpirationStrategy(IExpirationStrategy strategy)
+    {
+        expirationStrategy = strategy;
+    }
+
+    private void GenerateNewRecipe()
+    {
+        if (generationStrategy != null && recipeTree.Count() < 4)
+        {
+            RecipeSO newRecipe = generationStrategy.GenerateRecipe(recipeListSO.recipeSOList);
+            recipeTree.Insert((newRecipe, 60f));
+            OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void UpdateSortedRecipes()
     {
-        sortedRecipeList = new List<(RecipeSO recipe, float timeRemaining)>(recipeTree.InOrderTraversal());
-
-        Quicksort(sortedRecipeList, 0, sortedRecipeList.Count - 1);
-    }
-
-    private void Quicksort(List<(RecipeSO recipe, float timeRemaining)> list, int left, int right)
-    {
-        if (left < right)
+        if (sortingStrategy != null)
         {
-            int pivotIndex = Partition(list, left, right);
-            Quicksort(list, left, pivotIndex - 1);
-            Quicksort(list, pivotIndex + 1, right);
+            sortedRecipeList = new List<(RecipeSO recipe, float timeRemaining)>(recipeTree.InOrderTraversal());
+            sortingStrategy.Sort(sortedRecipeList);
         }
     }
 
-    private int Partition(List<(RecipeSO recipe, float timeRemaining)> list, int left, int right)
+    private void HandleRecipeExpiration()
     {
-        var pivot = list[right];
-        int i = left - 1;
-
-        for (int j = left; j < right; j++)
+        if (expirationStrategy != null)
         {
-            if (list[j].recipe.priority > pivot.recipe.priority ||
-                (list[j].recipe.priority == pivot.recipe.priority && list[j].timeRemaining < pivot.timeRemaining))
-            {
-                i++;
-                (list[i], list[j]) = (list[j], list[i]);
-            }
+            expirationStrategy.HandleExpiration(sortedRecipeList);
         }
-
-        (list[i + 1], list[right]) = (list[right], list[i + 1]);
-        return i + 1;
     }
-
+    
     public void DeliveryRecipe(PlateKitchenObject plateKitchenObject)
     {
         foreach (var (recipe, timeRemaining) in  recipeTree.InOrderTraversal())
@@ -172,7 +151,9 @@ public class DeliveryManager : MonoBehaviour
         }
         return recipes;
     }
-
+    
+    
+    
     public void ResetDeliveryManager()
     {
         recipeTree = new BinarySearchTree<(RecipeSO recipe, float timeRemaining)>((a, b) =>
@@ -212,7 +193,5 @@ public class DeliveryManager : MonoBehaviour
             Debug.Log($"No se encontró la receta con el nombre: {recipeName}");
         }
     }
-
-
-
+    
 }
