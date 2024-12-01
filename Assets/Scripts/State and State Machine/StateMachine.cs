@@ -24,4 +24,5 @@ public class StateMachine
     {
         currentState?.Execute();
     }
+    public IState GetCurrentState() => currentState;
 }
