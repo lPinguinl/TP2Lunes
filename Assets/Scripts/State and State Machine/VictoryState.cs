@@ -15,7 +15,7 @@ public class VictoryState : IState
 
     public void Execute()
     {
-        // Lógica de victoria, si es necesario
+        
     }
 
     public void Exit() { }

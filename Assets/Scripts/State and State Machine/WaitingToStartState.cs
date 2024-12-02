@@ -10,7 +10,7 @@ public class WaitingToStartState : IState
     public WaitingToStartState(GameManager gameManager)
     {
         this.gameManager = gameManager;
-        this.timer = 1f; // Inicializa el temporizador aquí
+        this.timer = 1f; 
     }
 
     public void Enter() { }

@@ -15,7 +15,7 @@ public class GameOverState : IState
 
     public void Execute()
     {
-        // Lógica de fin de juego
+
     }
 
     public void Exit() { }

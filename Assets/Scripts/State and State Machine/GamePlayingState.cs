@@ -15,7 +15,7 @@ public class GamePlayingState : IState
 
     public void Execute()
     {
-        // Lógica del juego en curso
+
     }
 
     public void Exit() { }

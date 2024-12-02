@@ -11,10 +11,10 @@ public class GameManager : MonoBehaviour
 
     private StateMachine stateMachine;
 
-    private float countdownToStart = 3f; // Añadir este campo
+    private float countdownToStart = 3f; 
 
-    public int expiredRecipeCount = 0; // Añadir este campo
-    private int completedRecipesCount = 0; // Añadir este campo
+    public int expiredRecipeCount = 0; 
+    private int completedRecipesCount = 0; 
 
     private void Awake()
     {
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
         expiredRecipeCount = 0;
         completedRecipesCount = 0;
         ChangeState(new WaitingToStartState(this));
-        DeliveryManager.Instance.ResetDeliveryManager(); // Resetea el DeliveryManager
+        DeliveryManager.Instance.ResetDeliveryManager(); // Resete del DeliveryManager
     }
 
     public bool IsGamePlaying()
@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
     {
         if (stateMachine.GetCurrentState() is CountdownToStartState countdownState)
         {
-            return countdownState.Timer; // Asegúrate de que Timer es accesible
+            return countdownState.Timer; 
         }
         return 0f;
     }

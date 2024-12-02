@@ -18,7 +18,7 @@ public class BurnedState : IState
 
     public void Execute()
     {
-        // Aquí puedes agregar cualquier lógica adicional para cuando el objeto esté quemado.
+
     }
 
     public void Exit() { }
