@@ -2606,6 +2606,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6111194364966017446, guid: 991be0d023fe42440b14006ffc7aeb2f, type: 3}
   m_PrefabInstance: {fileID: 376208909}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &627638217 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8163024042787909236, guid: bd730b0b120360d48b50475bbdb73bad, type: 3}
+  m_PrefabInstance: {fileID: 1469857166}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &643987993 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6111194364966017446, guid: 991be0d023fe42440b14006ffc7aeb2f, type: 3}
@@ -5018,6 +5023,62 @@ MonoBehaviour:
   recipeNameText: {fileID: 558068761}
   iconContainer: {fileID: 963098794}
   iconTemplate: {fileID: 884338604}
+--- !u!1 &1280558057
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1280558059}
+  - component: {fileID: 1280558058}
+  m_Layer: 0
+  m_Name: KitchenObjectManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1280558058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280558057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63dccd927f89f154bb4e8d73b32fe576, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kitchenSprites:
+  - {fileID: 21300000, guid: 77b28124b8bda494381c80bd5aa42c22, type: 3}
+  - {fileID: 21300000, guid: e1c23b5aded59d84da30738d3267a6c9, type: 3}
+  - {fileID: 21300000, guid: da2d04fe27b94e34ea0b624569b48a6f, type: 3}
+  - {fileID: 21300000, guid: 91e8fe3de9249fc44b7bdd8050062896, type: 3}
+  - {fileID: 21300000, guid: aa1bacc24dde76e47b2ec0dd4e82385b, type: 3}
+  - {fileID: 21300000, guid: 3928afb5321bb3d489bbd4ac581b29a2, type: 3}
+  - {fileID: 21300000, guid: bee24f07c57157e45a946eed3bfe8b84, type: 3}
+  - {fileID: 21300000, guid: 549cb4f2b86d1b84d8cd41c1cfde26c8, type: 3}
+  - {fileID: 21300000, guid: c9f08c3c1ae2a364aaeaa3712540b1d4, type: 3}
+  - {fileID: 21300000, guid: f1f50c7ef90b19741b26f2040806cf56, type: 3}
+  - {fileID: 21300000, guid: 713ea9afa60dd6e4ebf6503a33e8cc99, type: 3}
+--- !u!4 &1280558059
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280558057}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.4115725, y: 1.872939, z: 1.8893385}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1287281884 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6357964331992600263, guid: e91ccee2a36d3a84a8f93d9afc78d079, type: 3}
@@ -5570,7 +5631,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8163024042787909236, guid: bd730b0b120360d48b50475bbdb73bad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2110747491}
   m_SourcePrefab: {fileID: 100100000, guid: bd730b0b120360d48b50475bbdb73bad, type: 3}
 --- !u!1001 &1522444730
 PrefabInstance:
@@ -8565,6 +8629,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6357964331992600263, guid: bd730b0b120360d48b50475bbdb73bad, type: 3}
   m_PrefabInstance: {fileID: 1469857166}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2110747491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627638217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63dccd927f89f154bb4e8d73b32fe576, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kitchenSprites:
+  - {fileID: 21300000, guid: da2d04fe27b94e34ea0b624569b48a6f, type: 3}
 --- !u!1001 &2142335178
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8740,3 +8818,4 @@ SceneRoots:
   - {fileID: 411598942}
   - {fileID: 355335003}
   - {fileID: 995359219}
+  - {fileID: 1280558059}
