@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlateKitchenObject : KitchenObject
+public class PlateKitchenObject : KitchenObject, IPrototype<PlateKitchenObject>
 {
     public event EventHandler<OnIngredientAddedEventArgs> OnIngredientAdded;
     public class OnIngredientAddedEventArgs : EventArgs
@@ -47,5 +47,29 @@ public class PlateKitchenObject : KitchenObject
     public List<KitchenObjectsSO> GetKitchenObjectsSOList()
     {
         return kitchenObjectSOList;
+    }
+    
+    public PlateKitchenObject Clone()
+    {
+        return Instantiate(this); // Clona el objeto usando Instantiate
+    }
+
+    public void Reset()
+    {
+        // Reinicia el estado del plato
+        kitchenObjectSOList.Clear();
+    }
+
+    public void DestroySelf()
+    {
+        // Notifica al pool (si corresponde) antes de destruir
+        if (GetKitchenObjectParent() is PlatesCounter counter)
+        {
+            counter.ReturnPlateToPool(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }

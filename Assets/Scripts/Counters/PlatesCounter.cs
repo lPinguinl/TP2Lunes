@@ -15,6 +15,7 @@ public class PlatesCounter : BaseCounter
     private int platesSpawnedAmountMax = 4;
 
     private Stack<KitchenObject> plateStack = new Stack<KitchenObject>(); // Stack de los platos 
+    [SerializeField] private PlatePool platePool;
 
     private void Update()
     {
@@ -56,4 +57,12 @@ public class PlatesCounter : BaseCounter
             }
         }
     }
+    
+    public void ReturnPlateToPool(PlateKitchenObject plate)
+    {
+        // Devuelve el plato al pool
+        platePool.ReturnPlate(plate);
+    }
+    
+    
 }
