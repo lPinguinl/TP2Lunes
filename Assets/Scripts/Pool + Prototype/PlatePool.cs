@@ -1,11 +1,10 @@
-// File: DesignPatterns/PlatePool.cs
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlatePool : MonoBehaviour
 {
     [SerializeField] private PlateKitchenObject platePrototype; // Prototipo del plato
-    [SerializeField] private int initialSize = 10; // Tamaño inicial del pool
+    [SerializeField] private int initialSize = 30; // Tamaño inicial del pool
 
     private Queue<PlateKitchenObject> pool = new Queue<PlateKitchenObject>();
 
@@ -17,33 +16,28 @@ public class PlatePool : MonoBehaviour
             return;
         }
 
-        // Inicializa el pool con objetos clónicos
+        // Inicializa el pool con platos clonados del prototipo
         for (int i = 0; i < initialSize; i++)
         {
-            PlateKitchenObject plate = platePrototype.Clone();
-            plate.gameObject.SetActive(false);
+            PlateKitchenObject plate = Instantiate(platePrototype);
+            plate.gameObject.SetActive(false); // Desactiva el plato
             pool.Enqueue(plate);
         }
     }
 
     public PlateKitchenObject GetPlate()
     {
-        if (platePrototype == null)
-        {
-            Debug.LogError("Plate prototype is not assigned in PlatePool.");
-            return null;
-        }
-
-        // Devuelve un plato del pool si hay disponibles
         if (pool.Count > 0)
         {
             PlateKitchenObject plate = pool.Dequeue();
-            plate.gameObject.SetActive(true);
+            plate.gameObject.SetActive(true); // Activa el plato al entregarlo
             return plate;
         }
 
-        // Si el pool está vacío, crea uno nuevo
-        return platePrototype.Clone();
+        // Si el pool está vacío, crea un nuevo plato
+        PlateKitchenObject newPlate = Instantiate(platePrototype);
+        newPlate.gameObject.SetActive(true);
+        return newPlate;
     }
 
     public void ReturnPlate(PlateKitchenObject plate)
@@ -54,9 +48,8 @@ public class PlatePool : MonoBehaviour
             return;
         }
 
-        // Reinicia el estado del plato y regresa al pool
-        plate.Reset();
-        plate.gameObject.SetActive(false);
+        plate.Reset(); // Reinicia el estado del plato
+        plate.gameObject.SetActive(false); // Desactiva el plato
         pool.Enqueue(plate);
     }
 }

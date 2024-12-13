@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-// ACA SE APLICA PILA
+
 public class PlatesCounter : BaseCounter
 {
     public event EventHandler OnPlateSpawned;
@@ -14,8 +14,8 @@ public class PlatesCounter : BaseCounter
     private int platesSpawnedAmount;
     private int platesSpawnedAmountMax = 4;
 
-    private Stack<KitchenObject> plateStack = new Stack<KitchenObject>(); // Stack de los platos 
-    [SerializeField] private PlatePool platePool;
+    private Stack<KitchenObject> plateStack = new Stack<KitchenObject>(); // Stack de los platos
+    [SerializeField] private PlatePool platePool; // Pool de platos
 
     private void Update()
     {
@@ -29,8 +29,10 @@ public class PlatesCounter : BaseCounter
                 platesSpawnedAmount++;
                 OnPlateSpawned?.Invoke(this, EventArgs.Empty);
 
-                // Pushea un nuevo plato a la pila
-                plateStack.Push(gameObject.AddComponent<KitchenObject>()); 
+                // Pushea un nuevo plato al Stack desde el pool
+                PlateKitchenObject plate = platePool.GetPlate();
+                plate.gameObject.SetActive(true);
+                plateStack.Push(plate); // Agrega el plato al Stack
             }
         }
     }
@@ -45,24 +47,30 @@ public class PlatesCounter : BaseCounter
                 // Hay al menos 1 plato
                 platesSpawnedAmount--;
 
+                // Usa el método original para instanciar un plato
                 KitchenObject.SpawnKitchenObject(plateKitchenObjectsSO, playerInteractions);
 
                 OnPlateRemoved?.Invoke(this, EventArgs.Empty);
 
-                // Saca el ulitmo q entro
+                // Saca el último plato del Stack
                 if (plateStack.Count > 0)
                 {
-                    plateStack.Pop(); // Saca el plato del Stack
+                    PlateKitchenObject plate = plateStack.Pop() as PlateKitchenObject;
+                    if (plate != null)
+                    {
+                        // Devuelve el plato al pool en lugar de destruirlo
+                        platePool.ReturnPlate(plate);
+                    }
                 }
             }
         }
     }
-    
     public void ReturnPlateToPool(PlateKitchenObject plate)
     {
-        // Devuelve el plato al pool
-        platePool.ReturnPlate(plate);
+        if (plate != null)
+        {
+            plate.gameObject.SetActive(false); // Desactiva el plato antes de devolverlo
+            platePool.ReturnPlate(plate);
+        }
     }
-    
-    
 }

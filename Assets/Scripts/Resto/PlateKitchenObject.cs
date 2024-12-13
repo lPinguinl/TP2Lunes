@@ -14,7 +14,6 @@ public class PlateKitchenObject : KitchenObject, IPrototype<PlateKitchenObject>
     [SerializeField] private List<KitchenObjectsSO> validKitchenObjectsSOList;
     private List<KitchenObjectsSO> kitchenObjectSOList;
 
-
     private void Awake()
     {
         kitchenObjectSOList = new List<KitchenObjectsSO>();
@@ -24,12 +23,12 @@ public class PlateKitchenObject : KitchenObject, IPrototype<PlateKitchenObject>
     {
         if (!validKitchenObjectsSOList.Contains(kitchenObjectSO))
         {
-            //Ingrediente no valido
+            // Ingrediente no válido
             return false;
         }
         if (kitchenObjectSOList.Contains(kitchenObjectSO))
         {
-            //Ya tiene este tipo
+            // Ya tiene este tipo
             return false;
         }
         else
@@ -41,7 +40,6 @@ public class PlateKitchenObject : KitchenObject, IPrototype<PlateKitchenObject>
             
             return true;
         }
-
     }
 
     public List<KitchenObjectsSO> GetKitchenObjectsSOList()
@@ -62,14 +60,14 @@ public class PlateKitchenObject : KitchenObject, IPrototype<PlateKitchenObject>
 
     public void DestroySelf()
     {
-        // Notifica al pool (si corresponde) antes de destruir
+        // Intenta obtener el parent como un PlatesCounter
         if (GetKitchenObjectParent() is PlatesCounter counter)
         {
-            counter.ReturnPlateToPool(this);
+            counter.ReturnPlateToPool(this); // Devuelve al pool si el parent es un PlatesCounter
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(gameObject); // Si no, destruye el objeto
         }
     }
 }
