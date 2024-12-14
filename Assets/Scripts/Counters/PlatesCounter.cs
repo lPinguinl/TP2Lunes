@@ -9,14 +9,18 @@ public class PlatesCounter : BaseCounter
     public event EventHandler OnPlateRemoved;
 
     [SerializeField] private KitchenObjectsSO plateKitchenObjectsSO;
+    [SerializeField] private PlateKitchenObject platePrefab;
+    
     private float spawnPlateTimer;
     private float spawnPlateTimerMax = 4f;
     private int platesSpawnedAmount;
     private int platesSpawnedAmountMax = 4;
-
-    private Stack<KitchenObject> plateStack = new Stack<KitchenObject>(); // Stack de los platos
-    [SerializeField] private PlatePool platePool; // Pool de platos
-
+    
+    
+    private void Start()
+    {
+        PlateKitchenObject.InitializePool(platePrefab, transform); // Inicializa el pool con el prefab
+    }
     private void Update()
     {
         spawnPlateTimer += Time.deltaTime;
@@ -28,11 +32,8 @@ public class PlatesCounter : BaseCounter
             {
                 platesSpawnedAmount++;
                 OnPlateSpawned?.Invoke(this, EventArgs.Empty);
+                
 
-                // Pushea un nuevo plato al Stack desde el pool
-                PlateKitchenObject plate = platePool.GetPlate();
-                plate.gameObject.SetActive(true);
-                plateStack.Push(plate); // Agrega el plato al Stack
             }
         }
     }
@@ -46,22 +47,11 @@ public class PlatesCounter : BaseCounter
             {
                 // Hay al menos 1 plato
                 platesSpawnedAmount--;
-
+                
                 // Usa el método original para instanciar un plato
                 KitchenObject.SpawnKitchenObject(plateKitchenObjectsSO, playerInteractions);
 
                 OnPlateRemoved?.Invoke(this, EventArgs.Empty);
-
-                // Saca el último plato del Stack
-                if (plateStack.Count > 0)
-                {
-                    PlateKitchenObject plate = plateStack.Pop() as PlateKitchenObject;
-                    if (plate != null)
-                    {
-                        // Devuelve el plato al pool en lugar de destruirlo
-                        platePool.ReturnPlate(plate);
-                    }
-                }
             }
         }
     }
@@ -70,7 +60,6 @@ public class PlatesCounter : BaseCounter
         if (plate != null)
         {
             plate.gameObject.SetActive(false); // Desactiva el plato antes de devolverlo
-            platePool.ReturnPlate(plate);
         }
     }
 }

@@ -1,7 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Collections.Generic;
 
 public class PlateKitchenObject : KitchenObject, IPrototype<PlateKitchenObject>
 {
@@ -10,15 +9,42 @@ public class PlateKitchenObject : KitchenObject, IPrototype<PlateKitchenObject>
     {
         public KitchenObjectsSO kitchenObjectsSO;
     }
-    
+
     [SerializeField] private List<KitchenObjectsSO> validKitchenObjectsSOList;
     private List<KitchenObjectsSO> kitchenObjectSOList;
+
+    private static ObjectPool<PlateKitchenObject> pool; // Pool genérica
 
     private void Awake()
     {
         kitchenObjectSOList = new List<KitchenObjectsSO>();
     }
-    
+
+    // Inicializar el pool genérico
+    public static void InitializePool(PlateKitchenObject prefab, Transform parent)
+    {
+        pool = new ObjectPool<PlateKitchenObject>(prefab, parent);
+    }
+
+    // Obtener un plato del pool
+    public static PlateKitchenObject GetFromPool()
+    {
+        PlateKitchenObject plate = pool.Get();
+        plate.kitchenObjectSOList.Clear(); // Limpia ingredientes al obtener el plato
+        return plate;
+    }
+
+    // Devolver un plato al pool
+    public static void ReturnToPool(PlateKitchenObject plate)
+    {
+        // Limpia la lista de ingredientes antes de devolver el plato al pool
+        plate.kitchenObjectSOList.Clear();
+
+        // Devuelve el plato al pool
+        pool.Return(plate);
+    }
+
+    // Método para agregar un ingrediente al plato
     public bool TrAddIngredient(KitchenObjectsSO kitchenObjectSO)
     {
         if (!validKitchenObjectsSOList.Contains(kitchenObjectSO))
@@ -34,40 +60,28 @@ public class PlateKitchenObject : KitchenObject, IPrototype<PlateKitchenObject>
         else
         {
             kitchenObjectSOList.Add(kitchenObjectSO);
-            
-            OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs 
-                { kitchenObjectsSO = kitchenObjectSO });
-            
+
+            // Notificar que se agregó un ingrediente
+            OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs
+            {
+                kitchenObjectsSO = kitchenObjectSO
+            });
+
             return true;
         }
     }
 
+    // Obtener la lista de ingredientes
     public List<KitchenObjectsSO> GetKitchenObjectsSOList()
     {
         return kitchenObjectSOList;
     }
-    
+
+    // Implementación del patrón Prototype
     public PlateKitchenObject Clone()
     {
-        return Instantiate(this); // Clona el objeto usando Instantiate
-    }
-
-    public void Reset()
-    {
-        // Reinicia el estado del plato
-        kitchenObjectSOList.Clear();
-    }
-
-    public void DestroySelf()
-    {
-        // Intenta obtener el parent como un PlatesCounter
-        if (GetKitchenObjectParent() is PlatesCounter counter)
-        {
-            counter.ReturnPlateToPool(this); // Devuelve al pool si el parent es un PlatesCounter
-        }
-        else
-        {
-            Destroy(gameObject); // Si no, destruye el objeto
-        }
+        PlateKitchenObject clone = Instantiate(this);
+        clone.kitchenObjectSOList = new List<KitchenObjectsSO>(this.kitchenObjectSOList); // Copiar ingredientes
+        return clone;
     }
 }

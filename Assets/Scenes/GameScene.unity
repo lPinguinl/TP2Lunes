@@ -840,7 +840,11 @@ PrefabInstance:
     - target: {fileID: 6011594205514653639, guid: b4bdb9d005af91e4dbb7d3d592e482ab, type: 3}
       propertyPath: platePool
       value: 
-      objectReference: {fileID: 821171736}
+      objectReference: {fileID: 0}
+    - target: {fileID: 6011594205514653639, guid: b4bdb9d005af91e4dbb7d3d592e482ab, type: 3}
+      propertyPath: platePrefab
+      value: 
+      objectReference: {fileID: -868104711010517709, guid: a3ef81e994a3ec746877838514eeded1, type: 3}
     - target: {fileID: 7421837393910037076, guid: b4bdb9d005af91e4dbb7d3d592e482ab, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -2281,7 +2285,11 @@ PrefabInstance:
     - target: {fileID: 6011594205514653639, guid: b4bdb9d005af91e4dbb7d3d592e482ab, type: 3}
       propertyPath: platePool
       value: 
-      objectReference: {fileID: 821171736}
+      objectReference: {fileID: 0}
+    - target: {fileID: 6011594205514653639, guid: b4bdb9d005af91e4dbb7d3d592e482ab, type: 3}
+      propertyPath: platePrefab
+      value: 
+      objectReference: {fileID: -868104711010517709, guid: a3ef81e994a3ec746877838514eeded1, type: 3}
     - target: {fileID: 7421837393910037076, guid: b4bdb9d005af91e4dbb7d3d592e482ab, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -3186,52 +3194,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6111194364966017446, guid: 991be0d023fe42440b14006ffc7aeb2f, type: 3}
   m_PrefabInstance: {fileID: 1764451034}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &821171735
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 821171737}
-  - component: {fileID: 821171736}
-  m_Layer: 0
-  m_Name: Pool
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &821171736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 821171735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 409e05d3ca207444c9a69a2330c03a83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  platePrototype: {fileID: -868104711010517709, guid: a3ef81e994a3ec746877838514eeded1, type: 3}
-  initialSize: 30
---- !u!4 &821171737
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 821171735}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.30475545, y: 2.0824032, z: -6.0349064}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &824555634 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 143717793296232177, guid: a4e9a2cdd6d00fd44834884eddb6e3b7, type: 3}
@@ -8897,4 +8859,3 @@ SceneRoots:
   - {fileID: 355335003}
   - {fileID: 995359219}
   - {fileID: 1280558059}
-  - {fileID: 821171737}
