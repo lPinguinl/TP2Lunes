@@ -7,21 +7,23 @@ using UnityEngine.Video;
 public class ContainerCounter : BaseCounter
 {
     public event EventHandler OnPlayerGrabbedObject;
-        
     
-        [SerializeField] private KitchenObjectsSO kitchenObjectsSO;
-        public override void Interact(PlayerInteractions playerInteractions)
-        {
-            if (!playerInteractions.HasKitchenObject())
-            {
-                //El player no lleva nada encima pa
-                KitchenObject.SpawnKitchenObject(kitchenObjectsSO, playerInteractions);
-                
-                
-                OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
-            }
-           
-        }
-                
+    private IGenericFactory<KitchenObject> _kitchenObjectFactory;
+        
+    [SerializeField] private KitchenObjectsSO kitchenObjectsSO;
+    
+    private void Awake()
+    {
+        _kitchenObjectFactory = new KitchenObjectFactory(kitchenObjectsSO);
+    }
 
+    public override void Interact(PlayerInteractions playerInteractions)
+    {
+        if (!playerInteractions.HasKitchenObject())
+        {
+            // Utiliza la fábrica para crear el objeto de cocina
+            KitchenObject kitchenObject = _kitchenObjectFactory.Create(playerInteractions);
+            OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
+        }
+    }
 }
