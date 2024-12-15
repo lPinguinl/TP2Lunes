@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
-using System;
-using UnityEngine;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,16 +10,32 @@ public class GameManager : MonoBehaviour
 
     private StateMachine stateMachine;
 
-    private float countdownToStart = 3f; 
+    private float countdownToStart = 3f;
 
     public int expiredRecipeCount = 0; 
     private int completedRecipesCount = 0; 
+
+    [SerializeField] private AudioManager audioManagerPrefab; // Referencia al prefab de AudioManager
+    [SerializeField] private AudioClip cuttingClip; // Campo asignable del clip de corte
 
     private void Awake()
     {
         Instance = this;
         stateMachine = new StateMachine();
         stateMachine.ChangeState(new WaitingToStartState(this));
+
+        // Instanciar el AudioManager desde el Prefab
+        AudioManager audioManager = Instantiate(audioManagerPrefab, transform);
+        AudioSource audioSource = audioManager.GetComponent<AudioSource>();
+
+        var audioClips = new Dictionary<string, AudioClip>
+        {
+            { "cuttingSound", cuttingClip }
+        };
+        audioManager.Initialize(audioSource, audioClips);
+
+        // Registrar en el Service Locator
+        ServiceLocator.Register<IAudioManager>(audioManager);
     }
 
     private void Update()
@@ -46,11 +61,10 @@ public class GameManager : MonoBehaviour
 
     public void ResetGame()
     {
-        // Resetea contadores y estados
         expiredRecipeCount = 0;
         completedRecipesCount = 0;
         ChangeState(new WaitingToStartState(this));
-        DeliveryManager.Instance.ResetDeliveryManager(); // Resete del DeliveryManager
+        DeliveryManager.Instance.ResetDeliveryManager(); 
     }
 
     public bool IsGamePlaying()
@@ -77,7 +91,7 @@ public class GameManager : MonoBehaviour
     {
         if (completedCount >= 4)
         {
-            SetVictory(); // Cambia a estado de victoria
+            SetVictory(); 
         }
     }
 
