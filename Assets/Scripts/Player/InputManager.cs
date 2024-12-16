@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
 public class InputManager : MonoBehaviour
 {
     private PlayerInput playerInput;
@@ -14,25 +13,18 @@ public class InputManager : MonoBehaviour
     public event EventHandler OnInteractAction; 
     public event EventHandler OnInteractuarAction;
     
-    private DebugController debugController; // Referencia al DebugController
-
-
+    private DebugConsole debugConsole; // Referencia a la consola de depuración
 
     private void Awake()
     {
         playerInput = new PlayerInput();
         
         onFoot = playerInput.OnFoot;
-        
         motor = GetComponent<PlayerMotor>();
-        
         look = GetComponent<PlayerLook>();
-        
         cursorLock = GetComponent<MouseLock>();
-        
         interactions = GetComponent<PlayerInteractions>();
-        
-        debugController = GetComponent<DebugController>();
+        debugConsole = GetComponent<DebugConsole>(); // Asegúrate de que sea DebugConsole si la refactorizaste
 
         onFoot.Interact.performed += Interact_performed;
         onFoot.Interactuar.performed += Interactuar_performed;
@@ -40,10 +32,8 @@ public class InputManager : MonoBehaviour
         onFoot.CursorLock.performed += ctx => cursorLock.enabled = false;
         onFoot.CursorLock.canceled += ctx => cursorLock.enabled = true;
         
-        onFoot.ToggleDebug.performed += ctx => debugController.OnToggleDebug();
-        onFoot.ExecuteCommand.canceled += ctx => debugController.OnReturn();
-        
-        
+        onFoot.ToggleDebug.performed += ctx => debugConsole.OnToggleDebug();
+        onFoot.ExecuteCommand.canceled += ctx => debugConsole.OnReturn();
     }
 
     private void Interactuar_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
